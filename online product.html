@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ElectroMart - Electronics Store</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #f2f2f2;
+}
+
+header {
+    background-color: #0d47a1;
+    color: white;
+    padding: 15px;
+    text-align: center;
+}
+
+.filters {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    padding: 15px;
+    background: white;
+    flex-wrap: wrap;
+}
+
+.filters input, .filters select {
+    padding: 8px;
+    font-size: 14px;
+    width: 200px;
+}
+
+.product-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.product-card {
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    text-align: center;
+    transition: 0.3s;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+}
+
+.product-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.price {
+    color: #e65100;
+    font-weight: bold;
+    font-size: 18px;
+    margin: 8px 0;
+}
+
+button {
+    background-color: #0d47a1;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #1565c0;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>ElectroMart - Electronics Store</h1>
+</header>
+
+<div class="filters">
+    <input type="text" id="searchInput" placeholder="Search products...">
+    
+    <select id="categoryFilter">
+        <option value="all">All Categories</option>
+        <option value="Laptop">Laptop</option>
+        <option value="Phone">Phone</option>
+        <option value="Headphones">Headphones</option>
+        <option value="Tablet">Tablet</option>
+        <option value="Refrigerator">Refrigerator</option>
+    </select>
+</div>
+
+<div class="product-container" id="productContainer"></div>
+
+<script>
+const products = [
+    {
+        name: "HP Pavilion Laptop",
+        category: "Laptop",
+        price: 65999,
+        rating: 4.5,
+        image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8"
+    },
+    {
+        name: "iPhone 14",
+        category: "Phone",
+        price: 79999,
+        rating: 4.7,
+        image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9"
+    },
+    {
+        name: "Sony Wireless Headphones",
+        category: "Headphones",
+        price: 9999,
+        rating: 4.4,
+        image: "https://i.ytimg.com/vi/v6EjmbMgv80/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBdIiPYnTZkjoHSQ-74F3B9UpYKJQ"
+    },
+    {
+        name: "samsung fridge",
+        category: "Refrigerator",
+        price: 59999,
+        rating: 4.4,
+        image: "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSmpBbsW6qt0TraKWwjVXwtvb7U_ICRBDPaB3UyzHWUbJJVoJPyUonDaq5gVdGjXsPzWsl9TU7ZOIe60DOF1MKXmu8K0as7dSp8IHI70dPjhuR_3JfzagUfWWrjdTXJjgbHgh6bJZU&usqp=CAc	"
+    },
+    {
+        name: "Samsung Galaxy Tab",
+        category: "Tablet",
+        price: 28999,
+        rating: 4.3,
+        image: "https://suprememobiles.in/cdn/shop/files/GalayTabA9Plus-QualcommSnapdragon.webp?v=1752821716"
+    },
+    {
+        name: "iphone 15",
+        category: "Phone",
+        price: 89999,
+        rating: 4.9,
+        image: "https://www.apple.com/newsroom/images/2023/09/apple-unveils-iphone-15-pro-and-iphone-15-pro-max/tile/Apple-iPhone-15-Pro-lineup-hero-230912.jpg.news_app_ed.jpg"
+    },
+    {
+        name: "Dell Gaming Laptop",
+        category: "Laptop",
+        price: 89999,
+        rating: 4.6,
+        image: "https://images.unsplash.com/photo-1603302576837-37561b2e2302"
+    }
+
+];
+
+const productContainer = document.getElementById("productContainer");
+const searchInput = document.getElementById("searchInput");
+const categoryFilter = document.getElementById("categoryFilter");
+
+function displayProducts(filteredProducts) {
+    productContainer.innerHTML = "";
+    filteredProducts.forEach(product => {
+        productContainer.innerHTML += `
+            <div class="product-card">
+                <img src="${product.image}?auto=format&fit=crop&w=400&q=80" alt="${product.name}">
+                <h3>${product.name}</h3>
+                <p class="price">₹ ${product.price.toLocaleString('en-IN')}</p>
+                <p>⭐ ${product.rating}</p>
+                <button onclick="addToCart('${product.name}')">Add to Cart</button>
+            </div>
+        `;
+    });
+}
+
+function addToCart(productName) {
+    alert(productName + " added to cart!");
+}
+
+function filterProducts() {
+    const searchValue = searchInput.value.toLowerCase();
+    const categoryValue = categoryFilter.value;
+
+    const filtered = products.filter(product => {
+        const matchesSearch = product.name.toLowerCase().includes(searchValue);
+        const matchesCategory = categoryValue === "all" || product.category === categoryValue;
+        return matchesSearch && matchesCategory;
+    });
+
+    displayProducts(filtered);
+}
+
+searchInput.addEventListener("input", filterProducts);
+categoryFilter.addEventListener("change", filterProducts);
+
+displayProducts(products);
+</script>
+
+</body>
+</html>
